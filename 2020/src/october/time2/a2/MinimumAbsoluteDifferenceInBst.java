@@ -29,12 +29,26 @@ public class MinimumAbsoluteDifferenceInBst {
      * 时间复杂度 O(n)
      * 空间复杂度 O(1)
      */
+    int pre;
+    int ans;
     public int getMinimumDifference(TreeNode root) {
-        return 0;
+        pre = -1;
+        ans = Integer.MAX_VALUE;
+        inOrder(root);
+        return ans;
     }
 
-
-
+    private void inOrder(TreeNode root) {
+        if (root == null) {
+            return ;
+        }
+        inOrder(root.left);
+        if (pre != -1) {
+            ans = Math.min(ans, root.val - pre);
+        }
+        pre = root.val;
+        inOrder(root.right);
+    }
 
 
     public static void main(String[] args) {
