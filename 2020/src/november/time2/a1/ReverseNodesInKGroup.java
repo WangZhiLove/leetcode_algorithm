@@ -24,7 +24,44 @@ public class ReverseNodesInKGroup {
      */
 
     public ListNode reverseKGroup(ListNode head, int k) {
-        return head;
+        // 边界条件
+        if (head == null || k == 1) {
+            return head;
+        }
+        // 开始执行
+        ListNode headNode = new ListNode(0);
+        headNode.next = head;
+        ListNode pre = headNode;
+        ListNode end = head;
+        int count = 0;
+        while (end != null) {
+            count ++;
+            if (count % k != 0) {
+                end = end.next;
+                continue;
+            }
+            pre = reverseNode(pre, end.next);
+            end = pre.next;
+        }
+        return headNode.next;
+    }
+
+    private ListNode reverseNode(ListNode pre, ListNode next) {
+        // 交换节点
+        ListNode last = pre.next;
+        ListNode cur = last.next;
+        while (cur != next) {
+            ListNode temp = cur.next;
+            // 第二个节点和第一个节点交换,永远是个pre.next节点来做操作，可以保证pre的下一个元素为next的前一个节点
+            cur.next = pre.next;
+            // 头结点指定交换后的头结点
+            pre.next = cur;
+            // 第三个节点为原第一个的下一个节点
+            last.next = temp;
+            // 当前节点为第三个节点
+            cur = temp;
+        }
+        return last;
     }
 }
 
