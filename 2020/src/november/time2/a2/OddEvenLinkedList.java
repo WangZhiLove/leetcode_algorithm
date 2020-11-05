@@ -23,7 +23,19 @@ public class OddEvenLinkedList {
      */
 
     public ListNode oddEvenList(ListNode head) {
-
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode odd = head;
+        ListNode event = head.next;
+        ListNode last = event;
+        while (event != null && event.next != null) {
+            odd.next = event.next;
+            odd = odd.next;
+            event.next = odd.next;
+            event = event.next;
+        }
+        odd.next = last;
         return head;
     }
 
