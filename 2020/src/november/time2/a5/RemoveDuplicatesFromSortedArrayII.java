@@ -44,8 +44,24 @@ public class RemoveDuplicatesFromSortedArrayII {
      * nums 按递增顺序排列
      */
 
-    public int removeDuplicates(int[] nums) {
+    /**
+     * 双指针法 + 计数
+     */
 
-        return 0;
+    public int removeDuplicates(int[] nums) {
+        // left从1开始，跳过0的判断，count默认从1开始，中间有个错位的思路
+        int left = 1;
+        int count = 1;
+        for (int right = 1; right < nums.length; right ++) {
+            if (nums[right] == nums[right - 1]) {
+                count ++;
+            } else {
+                count = 1;
+            }
+            if (count <= 2) {
+                nums[left ++] = nums[right];
+            }
+        }
+        return left;
     }
 }
