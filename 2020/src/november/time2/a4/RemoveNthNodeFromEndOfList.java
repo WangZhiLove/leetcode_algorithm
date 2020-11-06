@@ -19,8 +19,26 @@ public class RemoveNthNodeFromEndOfList {
      * 你能尝试使用一趟扫描实现吗？
      */
 
+    /**
+     * 这道题目的思路倒是比较清晰，双指针的解法，当然可以使用
+     * 栈或者Map的数据结构，也可以实现O(1)的时间复杂度，不过
+     * 空间复杂度就是O(n)了
+     */
+
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        return null;
+        ListNode preHead = new ListNode(0);
+        preHead.next = head;
+        ListNode left = preHead;
+        ListNode right = left.next;
+        for (int i = 0; i < n; i++) {
+            right = right.next;
+        }
+        while (right != null) {
+            left = left.next;
+            right = right.next;
+        }
+        left.next = left.next.next;
+        return preHead.next;
     }
 }
 
