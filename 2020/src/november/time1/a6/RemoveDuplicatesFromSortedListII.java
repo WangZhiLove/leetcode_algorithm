@@ -21,7 +21,7 @@ public class RemoveDuplicatesFromSortedListII {
      */
 
     /**
-     * 有没有更贱简单的写法
+     * 有没有更简单的写法
      */
     public ListNode deleteDuplicates(ListNode head) {
         ListNode preHeader = new ListNode(0);

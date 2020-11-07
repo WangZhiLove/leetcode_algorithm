@@ -17,11 +17,44 @@ public class RemoveDuplicatesFromSortedListII {
 
     /**
      * 这道题目有了带头节点，啥都好说，所以说带头节点在链表数据结构的算法题目中是一个很重要的概念
+     * 双指针的思路,遇到重复的先去掉，从重复后的第一个元素重新开始判断，有种递归的意思
      */
 
-    public ListNode deleteDuplicates(ListNode head) {
+    /// 循环思路
+    /*public ListNode deleteDuplicates(ListNode head) {
+        ListNode preHeader = new ListNode(0);
+        preHeader.next = head;
+        ListNode left = preHeader;
+        while (left.next != null && left.next.next != null) {
+            if (left.next.val == left.next.next.val) {
+                ListNode temp = left.next;
+                while (temp != null && temp.next != null && temp.val == temp.next.val) {
+                    temp = temp.next;
+                }
+                left.next = temp.next;
+            } else {
+                left = left.next;
+            }
+        }
+        return preHeader.next;
+    }*/
 
-        return null;
+    /**
+     * 递归思路
+     */
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        if (head.val == head.next.val) {
+            while (head != null && head.next != null && head.val == head.next.val) {
+                head = head.next;
+            }
+            return deleteDuplicates(head.next);
+        } else {
+            head.next = deleteDuplicates(head.next);
+            return head;
+        }
     }
 }
 
