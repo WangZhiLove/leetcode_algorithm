@@ -1,5 +1,7 @@
 package november.time2.a7;
 
+import java.util.Stack;
+
 public class LargestRectangleInHistogram {
     /**
      * 84. 柱状图中最大的矩形
@@ -19,8 +21,29 @@ public class LargestRectangleInHistogram {
      * 输出: 10
      */
 
+    /**
+     * 直接使用栈结构
+     */
+
     public int largestRectangleArea(int[] heights) {
-        return 0;
+        if (heights == null || heights.length == 0) {
+            return 0;
+        }
+        int len = heights.length;
+        Stack<Integer> stack = new Stack<>();
+        int result = Integer.MIN_VALUE;
+        for (int i = 0; i <= len; i++) {
+            int cur = i == len ? -1 : heights[i];
+            while (!stack.isEmpty() && cur <= heights[stack.peek()]) {
+                int height = heights[stack.pop()];
+                int left = stack.isEmpty() ? 0 : (stack.peek() + 1);
+                int right = i - 1;
+                int area = height * (right - left + 1);
+                result = Math.max(result, area);
+            }
+            stack.push(i);
+        }
+        return result;
     }
 
     public static void main(String[] args) {
