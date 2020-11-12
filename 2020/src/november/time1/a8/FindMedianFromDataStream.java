@@ -53,6 +53,7 @@ public class FindMedianFromDataStream {
 
     public void addNum(int num) {
         // 这块的目的知道，保持maxHeap，这里还得在研究下
+        // 这块要经过两个堆的目的其实是确认当前数字的大小的，也就是你插入的数字在列表的哪一个位置
         maxHeap.add(num);
         minHeap.add(maxHeap.poll());
         if (maxHeap.size() < minHeap.size()) {

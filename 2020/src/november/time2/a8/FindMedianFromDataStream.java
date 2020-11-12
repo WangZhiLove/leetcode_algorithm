@@ -1,7 +1,10 @@
 package november.time2.a8;
 
+import java.util.PriorityQueue;
+
 public class FindMedianFromDataStream {
     /**
+     * 295. 数据流的中位数
      * 中位数是有序列表中间的数。如果列表长度是偶数，中位数则是中间两个数的平均值。
      *
      * 例如，
@@ -27,16 +30,29 @@ public class FindMedianFromDataStream {
      * 如果数据流中 99% 的整数都在 0 到 100 范围内，你将如何优化你的算法？
      */
 
+    PriorityQueue<Integer> maxHeap;
+
+    PriorityQueue<Integer> minHeap;
+
     /** initialize your data structure here. */
     public FindMedianFromDataStream() {
-
+        maxHeap = new PriorityQueue<>((a, b) -> b - a);
+        minHeap = new PriorityQueue<>();
     }
 
     public void addNum(int num) {
-
+        maxHeap.add(num);
+        minHeap.add(maxHeap.poll());
+        if (maxHeap.size() < minHeap.size()) {
+            maxHeap.add(minHeap.poll());
+        }
     }
 
     public double findMedian() {
-        return 0.0;
+        if (maxHeap.size() == minHeap.size()) {
+            return (maxHeap.peek() + minHeap.peek()) * 0.5;
+        } else {
+            return maxHeap.peek();
+        }
     }
 }
