@@ -1,5 +1,7 @@
 package november.time2.a9;
 
+import java.util.Stack;
+
 public class MinimumRemoveToMakeValidParentheses {
     /**
      * 1249. 移除无效的括号
@@ -42,7 +44,37 @@ public class MinimumRemoveToMakeValidParentheses {
      * s[i] 可能是 '('、')' 或英文小写字母
      */
 
+    /**
+     * 使用栈结构 + 存在数组解决
+     */
+
     public String minRemoveToMakeValid(String s) {
-        return null;
+        if (s == null || s.length() == 0) {
+            return s;
+        }
+        int sLen = s.length();
+        Stack<Integer> stack = new Stack<>();
+        boolean[] exists = new boolean[sLen];
+        for (int i = 0; i < sLen; i++) {
+            char c = s.charAt(i);
+            if (c == '(') {
+                stack.add(i);
+                exists[i] = true;
+            } else if (c == ')'){
+                if (stack.isEmpty()) {
+                    exists[i] = true;
+                } else {
+                    exists[stack.pop()] = false;
+                }
+            }
+        }
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < sLen; i++) {
+            if (exists[i]) {
+                continue;
+            }
+            result.append(s.charAt(i));
+        }
+        return result.toString();
     }
 }
