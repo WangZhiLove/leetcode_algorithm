@@ -1,5 +1,7 @@
 package november.time2.a10;
 
+import java.util.Stack;
+
 public class TrappingRainAater {
     /**
      * 42. 接雨水
@@ -21,7 +23,44 @@ public class TrappingRainAater {
      * 0 <= n <= 3 * 104
      * 0 <= height[i] <= 105
      */
+    /**
+     * 对称内容，就找栈结构
+     */
     public int trap(int[] height) {
-        return 0;
+        // 边界条件的判断
+        if (height == null || height.length == 0) {
+            return 0;
+        }
+        // 栈结构和存在数组
+        int result = 0;
+        int len = height.length;
+        Stack<Integer> stack = new Stack<>();
+        boolean[] exists = new boolean[len];
+        int index = 0;
+        while (index < len) {
+            while (!stack.isEmpty() && height[index] > height[stack.peek()]) {
+                int height1 = height[stack.pop()];
+                if (stack.isEmpty()) {
+                    break;
+                }
+                int width = index - stack.peek() - 1;
+                result += (Math.min(height[index], height[stack.peek()]) - height1) * width;
+            }
+            stack.push(index ++);
+        }
+        /// 使用while循环是不是更简单
+        /*for (int i = 0; i < len; i++) {
+            while (!stack.isEmpty() && height[i] > height[stack.peek()]) {
+                int height1 = height[stack.pop()];
+                if (stack.isEmpty()) {
+                    break;
+                }
+                int height2 = height[stack.peek()];
+                int width = i - stack.peek() - 1;
+                result += (Math.min(height[i], height2) - height1) * width;
+            }
+            stack.push(i);
+        }*/
+        return result;
     }
 }
