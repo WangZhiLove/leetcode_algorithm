@@ -68,7 +68,7 @@ public class MaximalRectangle {
         Stack<Integer> stack = new Stack<>();
         int index = 0;
         while (index < height.length) {
-            if (stack.isEmpty() || height[index] <= height[stack.peek()]) {
+            if (stack.isEmpty() || height[stack.peek()] <= height[index]) {
                 stack.push(index ++);
             } else {
                 int height2 = height[stack.pop()];
