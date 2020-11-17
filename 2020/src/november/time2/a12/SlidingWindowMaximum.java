@@ -1,5 +1,8 @@
 package november.time2.a12;
 
+import java.util.LinkedList;
+import java.util.Stack;
+
 public class SlidingWindowMaximum {
     /**
      * 239. 滑动窗口最大值
@@ -34,8 +37,66 @@ public class SlidingWindowMaximum {
      * 1 <= k <= nums.length
      */
 
-    public int[] maxSlidingWindow(int[] nums, int k) {
+    /**
+     * 昨天提交的是使用双端队列结构来进行窗口的移动，回忆一下
+     */
 
-        return null;
+    /// 昨天的回忆
+    /*public int[] maxSlidingWindow(int[] nums, int k) {
+        if (nums == null || nums.length == 0) {
+            return nums;
+        }
+        int[] result = new int[nums.length - k + 1];
+        LinkedList<Integer> deque = new LinkedList<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (!deque.isEmpty() && deque.peekFirst() == i - k) {
+                deque.pollFirst();
+            }
+            while (!deque.isEmpty() && nums[deque.peekLast()] < nums[i]) {
+                deque.pollLast();
+            }
+            deque.offer(i);
+            if (i - k + 1 >= 0) {
+                result[i - k + 1] = nums[deque.peekFirst()];
+            }
+        }
+        return result;
+    }*/
+
+    /**
+     * 更简单的写法
+     */
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if (nums == null || nums.length == 0) {
+            return nums;
+        }
+        int[] result = new int[nums.length - k + 1];
+        int loop = nums.length - k + 1;
+        int max = Integer.MIN_VALUE;
+        int maxIndex = -1;
+        for (int i = 0; i < loop; i++) {
+            if (maxIndex >= i) {
+                if (max < nums[i + k - 1]) {
+                    max = nums[i + k - 1];
+                    maxIndex = i + k - 1;
+                }
+                result[i] = max;
+            } else {
+                max = nums[i];
+                for (int i1 = i + 1; i1 < k + i; i1++) {
+                    if (max < nums[i1]) {
+                        max = nums[i1];
+                        maxIndex = i1;
+                    }
+                }
+                result[i] = max;
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        SlidingWindowMaximum slidingWindowMaximum = new SlidingWindowMaximum();
+        slidingWindowMaximum.maxSlidingWindow(new int[]{1,3,-1,-3,5,3,6,7}, 3);
     }
 }
