@@ -1,5 +1,8 @@
 package november.time2.a13;
 
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
 public class MergeKSortedLists {
     /**
      * 23. 合并K个升序链表
@@ -39,8 +42,30 @@ public class MergeKSortedLists {
      * lists[i].length 的总和不超过 10^4
      */
 
+    /**
+     * 使用优先队列，大顶堆
+     * 时间复杂度 O(n)
+     */
+
     public ListNode mergeKLists(ListNode[] lists) {
-        
+        if (lists == null || lists.length == 0) {
+            return null;
+        }
+        ListNode header = new ListNode(-1);
+        ListNode temp = header;
+        PriorityQueue<ListNode> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(o -> o.val));
+        for (int i = 0; i < lists.length; i++) {
+            if (lists[1] != null) {
+                priorityQueue.add(lists[i]);
+            }
+        }
+        while (!priorityQueue.isEmpty()) {
+            ListNode poll = priorityQueue.poll();
+            temp.next = poll;
+            if (poll.next != null) {
+                priorityQueue.add(poll.next);
+            }
+        }
         return null;
     }
 }
