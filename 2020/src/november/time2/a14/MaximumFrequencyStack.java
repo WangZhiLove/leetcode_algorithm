@@ -1,5 +1,9 @@
 package november.time2.a14;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
+
 public class MaximumFrequencyStack {
     /**
      * 895. 最大频率栈
@@ -42,16 +46,41 @@ public class MaximumFrequencyStack {
      * 单个测试样例中，对 FreqStack.pop 的总调用次数不会超过 10000。
      * 所有测试样例中，对 FreqStack.push 和 FreqStack.pop 的总调用次数不会超过 150000。
      */
-    public MaximumFrequencyStack() {
 
+    /**
+     * 数子出现的频率
+     */
+    private Map<Integer, Integer> freq;
+
+    /**
+     * 频率的长度
+     */
+    private Map<Integer, Stack<Integer>> lenStack;
+
+    private Integer maxLen;
+
+    public MaximumFrequencyStack() {
+        freq = new HashMap<>();
+        lenStack = new HashMap<>();
+        maxLen = 0;
     }
 
     public void push(int x) {
-
+        Integer len = freq.getOrDefault(x, 0) + 1;
+        freq.put(x, len);
+        if (len > maxLen) {
+            maxLen = len;
+        }
+        // 根据键值对去查找并初始化赋值
+        lenStack.computeIfAbsent(x, k -> new Stack<>()).push(x);
     }
 
     public int pop() {
-
-        return 0;
+        Integer pop = lenStack.get(maxLen).pop();
+        freq.put(pop, freq.get(pop) - 1);
+        if (lenStack.get(maxLen).size() == 0) {
+            maxLen --;
+        }
+        return pop;
     }
 }
