@@ -2,8 +2,10 @@ package november.time2.a15;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.TreeMap;
 
-public class SerializeAndDeserializeBinaryTree {
+public class SerializeAndDeserializeBinaryTreeBFS {
 
     /**
      * 297. 二叉树的序列化与反序列化
@@ -27,50 +29,61 @@ public class SerializeAndDeserializeBinaryTree {
      * 说明: 不要使用类的成员 / 全局 / 静态变量来存储状态，你的序列化和反序列化算法应该是无状态的。
      */
 
-    /**
-     * 先回忆bfs，再使用dfs解决
-     */
-
     // Encodes a tree to a single string.
     public String serialize(TreeNode root) {
         if (root == null) {
             return null;
         }
-        String result = serializeHelper(root, "");
+        // 使用bfs
+        StringBuilder result = new StringBuilder();
+        LinkedList<TreeNode> linkedList = new LinkedList<>();
+        linkedList.add(root);
+        while (!linkedList.isEmpty()) {
+            TreeNode treeNode = linkedList.pollFirst();
+            if (treeNode != null) {
+                result.append(treeNode.val + ",");
+                linkedList.add(treeNode.left);
+                linkedList.add(treeNode.right);
+            } else {
+                result.append("#,");
+            }
+        }
         return result.substring(0, result.length() - 1);
     }
 
-    private String serializeHelper(TreeNode root, String str) {
-        if (root == null) {
-            return str += "#,";
-        } else {
-            str += root.val + ",";
-            str = serializeHelper(root.left, str);
-            str = serializeHelper(root.right, str);
-        }
-        return str;
-    }
 
-    // Decodes your encoded data to tree.
+
     public TreeNode deserialize(String data) {
         if (data == null) {
             return null;
         }
-        LinkedList<String> strings = new LinkedList<>(Arrays.asList(data.split(",")));
-        return deserializeHelper(strings);
+        String[] split = data.split(",");
+        int index = 0;
+        TreeNode root = new TreeNode(Integer.parseInt(split[index ++]));
+        LinkedList<TreeNode> linkedList = new LinkedList<>();
+        linkedList.add(root);
+        while (index < split.length) {
+            TreeNode treeNode = linkedList.pollFirst();
+            String left = split[index++];
+            if ("#".equals(left)) {
+                treeNode.left = null;
+            } else {
+                TreeNode leftNode = new TreeNode(Integer.parseInt(left));
+                treeNode.left = leftNode;
+                linkedList.add(leftNode);
+            }
+            String right = split[index++];
+            if ("#".equals(right)) {
+                treeNode.right = null;
+            } else {
+                TreeNode rightNode = new TreeNode(Integer.parseInt(right));
+                treeNode.right = rightNode;
+                linkedList.add(rightNode);
+            }
+        }
+        return root;
     }
 
-    private TreeNode deserializeHelper(LinkedList<String> strings) {
-        if ("#".equals(strings.get(0))) {
-            strings.remove(0);
-            return null;
-        }
-        TreeNode treeNode = new TreeNode(Integer.parseInt(strings.get(0)));
-        strings.remove(0);
-        treeNode.left = deserializeHelper(strings);
-        treeNode.right = deserializeHelper(strings);
-        return treeNode;
-    }
 
     public static void main(String[] args) {
         TreeNode root = new TreeNode(1);
@@ -82,7 +95,7 @@ public class SerializeAndDeserializeBinaryTree {
         root.right = root2;
         root2.left = root3;
         root2.right = root4;
-        SerializeAndDeserializeBinaryTree serializeAndDeserializeBinaryTree = new SerializeAndDeserializeBinaryTree();
+        SerializeAndDeserializeBinaryTreeBFS serializeAndDeserializeBinaryTree = new SerializeAndDeserializeBinaryTreeBFS();
         String serialize = serializeAndDeserializeBinaryTree.serialize(root);
         System.out.println(serialize);
 
@@ -91,9 +104,3 @@ public class SerializeAndDeserializeBinaryTree {
     }
 }
 
-class TreeNode {
-     int val;
-     TreeNode left;
-     TreeNode right;
-     TreeNode(int x) { val = x; }
- }
