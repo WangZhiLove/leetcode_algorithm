@@ -41,8 +41,46 @@ public class DeleteNodeInABst {
      *     4   7
      */
 
+    /**
+     * 核心思想是 先找到对应节点，然后两种选择，从左子树找最大值或者从右子树找最小值，然后替换，之后删除找到的叶子节点，也就是替换的节点
+     */
+
     public TreeNode deleteNode(TreeNode root, int key) {
-        return null;
+        if (root == null) {
+            return null;
+        }
+        if (root.val == key) {
+            if (root.left == null && root.right == null) {
+                return null;
+            } else if (root.left != null) {
+                root.val = findLeftMaxNode(root.left);
+                root.left = deleteNode(root.left, root.val);
+            } else {
+                root.val = findRightMinNode(root.right);
+                root.right = deleteNode(root.right, root.val);
+            }
+        } else if (root.val < key) {
+            root.right = deleteNode(root.right, key);
+        } else {
+            root.left = deleteNode(root.left, key);
+        }
+        return root;
+    }
+
+    private int findLeftMaxNode(TreeNode left) {
+        TreeNode leftNode = left;
+        while (leftNode.right != null) {
+            leftNode = leftNode.right;
+        }
+        return leftNode.val;
+    }
+
+    private int findRightMinNode(TreeNode right) {
+        TreeNode rightNode = right;
+        while (rightNode.left != null) {
+            rightNode = rightNode.left;
+        }
+        return rightNode.val;
     }
 }
 
