@@ -25,9 +25,18 @@ public class FlipEquivalentBinaryTrees {
      * 每棵树中的每个值都是唯一的、在 [0, 99] 范围内的整数。
      *
      */
+    /**
+     * 反转对比就好
+     */
     public boolean flipEquiv(TreeNode root1, TreeNode root2) {
-        
-        return false;
+        if (root1 == null && root2 == null) {
+            return true;
+        }
+        if (root1 == null || root2 == null || root1.val != root2.val) {
+            return false;
+        }
+        return (flipEquiv(root1.left, root2.left) && flipEquiv(root1.right, root2.right))
+                || (flipEquiv(root1.left, root2.right) && flipEquiv(root1.right, root2.left));
     }
 }
 
