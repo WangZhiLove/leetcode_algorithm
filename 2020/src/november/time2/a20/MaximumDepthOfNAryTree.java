@@ -21,9 +21,22 @@ public class MaximumDepthOfNAryTree {
      * @return
      */
 
+    /**
+     * 递归走起来
+     */
     public int maxDepth(Node root) {
-        
-        return 0;
+        if (root == null) {
+            return 0;
+        }
+        int maxDepth = 1;
+        if (root.children.size() != 0) {
+            int temp = 0;
+            for (int i = 0; i < root.children.size(); i++) {
+                temp = Math.max(temp, maxDepth(root.children.get(i)));
+            }
+            maxDepth += temp;
+        }
+        return maxDepth;
     }
 }
 
