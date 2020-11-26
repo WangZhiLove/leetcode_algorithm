@@ -1,5 +1,9 @@
 package november.time2.a19;
 
+import sun.nio.cs.ext.MacDingbat;
+
+import java.util.Arrays;
+
 public class ConstructBinarySearchTreeFromPreorderTraversal {
     /**
      * 1008. 前序遍历构造二叉搜索树
@@ -26,7 +30,27 @@ public class ConstructBinarySearchTreeFromPreorderTraversal {
      */
 
     public TreeNode bstFromPreorder(int[] preorder) {
-        return null;
+        if (preorder.length == 0) {
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder[0]);
+        int leftIndex = -1;
+        int rightIndex = -1;
+        for (int i = 1; i < preorder.length; i++) {
+            if (root.val < preorder[i]) {
+                rightIndex = i;
+                break;
+            } else {
+                leftIndex = i;
+            }
+        }
+        if (leftIndex != -1) {
+            root.left = bstFromPreorder(Arrays.copyOfRange(preorder, 1, leftIndex + 1));
+        }
+        if (rightIndex != -1) {
+            root.right = bstFromPreorder(Arrays.copyOfRange(preorder, rightIndex, preorder.length));
+        }
+        return root;
     }
 }
 
