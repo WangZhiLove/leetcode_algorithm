@@ -39,7 +39,34 @@ public class IsGraphBipartite {
      * 图是无向的: 如果j 在 graph[i]里边, 那么 i 也会在 graph[j]里边。
      */
 
+    /**
+     * 理解题目的意思，题目中图的结构理解清除，第一层表示的是第几个节点，第二层表示的是与它相邻的节点
+     * dfs遍历每一个节点，给每一个节点着色，如果相邻的点出现同色，则就不是而粪土
+     */
+
     public boolean isBipartite(int[][] graph) {
-        return false;
+        int[] visits = new int[graph.length];
+        for (int i = 0; i < visits.length; i++) {
+            // 遍历节点
+            if (visits[i] == 0 && !dfs(graph, i, visits, 1)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean dfs(int[][] graph, int cur, int[] visits, int color) {
+        // 着色
+        visits[cur] = color;
+        for (int i : graph[cur]) {
+            // 当前节点与临节点同色
+            if (visits[i] == color) {
+                return false;
+            }
+            if (visits[i] == 0 && !dfs(graph, i, visits, -color)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
