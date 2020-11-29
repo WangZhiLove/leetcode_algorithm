@@ -1,6 +1,5 @@
 package november.time2.a19;
 
-import sun.nio.cs.ext.MacDingbat;
 
 import java.util.Arrays;
 
