@@ -1,5 +1,9 @@
 package november.time2.a22;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
 public class OptimizeWaterDistributionInAVillage {
     /**
      * 1168. 水资源分配优化
@@ -31,7 +35,40 @@ public class OptimizeWaterDistributionInAVillage {
      * pipes[i][0] != pipes[i][1]
      */
     public int minCostToSupplyWater(int n, int[] wells, int[][] pipes) {
+        if (n == 0) {
+            return 0;
+        }
+        int[] counts = new int[n + 1];
+        Arrays.fill(counts, -1);
+        // 优先队列
+        PriorityQueue<int[]> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(a -> a[2]));
+        for (int[] pipe : pipes) {
+            priorityQueue.add(pipe);
+        }
+        for (int i = 0; i < wells.length; i++) {
+            priorityQueue.add(new int[]{0, i + 1, wells[i]});
+        }
+        int result = 0;
+        int minCount = 0;
+        while (minCount < n) {
+            int[] poll = priorityQueue.poll();
+            // 找到当前节点的父节点，没有父节点,将当前节点作为父节点
+            int start = findParent(poll[0], counts);
+            int end = findParent(poll[1], counts);
+            // 如果两个节点的父节点相同，说明有回路，不进行合并
+            if (start != end) {
+                counts[start] = end;
+                minCount ++;
+                result += poll[2];
+            }
+        }
+        return result;
+    }
 
-        return 0;
+    private int findParent(int i, int[] counts) {
+        if (counts[i] == -1) {
+            return i;
+        }
+        return findParent(counts[i], counts);
     }
 }
