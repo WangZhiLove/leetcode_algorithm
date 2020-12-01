@@ -1,5 +1,7 @@
 package november.time2.a23;
 
+import java.util.*;
+
 public class ParallelCourses {
     /**
      * 1136. 平行课程
@@ -34,7 +36,54 @@ public class ParallelCourses {
      * 输入中没有重复的关系
      */
 
+    /**
+     * 拓扑算法
+     * 根据课程和关系获取最小的学期树
+     * @param N         课程数
+     * @param relations 课程的前后关系
+     * @return          最小的学期数
+     */
     public int minimumSemesters(int N, int[][] relations) {
-        return -1;
+        int[] visits = new int[N + 1];
+        Arrays.fill(visits, 0);
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for (int i = 0; i < relations.length; i++) {
+            int[] relation = relations[i];
+            visits[relation[1]] ++;
+            if (!map.containsKey(relation[0])) {
+                map.put(relation[0], new ArrayList<>());
+            }
+            map.get(relation[0]).add(relation[1]);
+        }
+        // bfs
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 1; i < visits.length; i++) {
+            if (visits[i] == 0) {
+                // 第一学期需要学习的课程
+                queue.offer(i);
+            }
+        }
+        int terms = 0;
+        int courseCount = 0;
+        while (!queue.isEmpty()) {
+            int loop = queue.size();
+            terms += 1;
+            courseCount += loop;
+            for (int i = 0; i < loop; i++) {
+                Integer poll = queue.poll();
+                // 为什么要判断呢？ 初度节点为0的节点没有后继
+                if (map.containsKey(poll)) {
+                    List<Integer> list = map.get(poll);
+                    for (Integer integer : list) {
+                        visits[integer] -- ;
+                        if (visits[integer] == 0) {
+                            queue.offer(integer);
+                        }
+                    }
+                }
+
+            }
+        }
+        return courseCount == N ? terms : -1;
     }
 }
