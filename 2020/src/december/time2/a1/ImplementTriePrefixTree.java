@@ -1,5 +1,8 @@
 package december.time2.a1;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ImplementTriePrefixTree {
     /**
      * 208. 实现 Trie (前缀树)
@@ -21,24 +24,79 @@ public class ImplementTriePrefixTree {
      * 保证所有输入均为非空字符串。
      */
 
+    TreeNode root;
+
     /** Initialize your data structure here. */
     public ImplementTriePrefixTree() {
-
+        root = new TreeNode();
     }
 
     /** Inserts a word into the trie. */
     public void insert(String word) {
-
+        Map<Character, TreeNode> child = root.child;
+        for (int i = 0; i < word.length(); i++) {
+            char c = word.charAt(i);
+            TreeNode cur = null;
+            if (child.containsKey(c)) {
+                cur = child.get(c);
+            } else {
+                cur = new TreeNode(c);
+                child.put(c, cur);
+            }
+            child = cur.child;
+            if (i == word.length() - 1) {
+                cur.isEnd = true;
+            }
+        }
     }
 
     /** Returns if the word is in the trie. */
     public boolean search(String word) {
+        TreeNode treeNode = searchWord(word);
+        if (treeNode != null && treeNode.isEnd) {
+            return true;
+        }
         return false;
     }
 
     /** Returns if there is any word in the trie that starts with the given prefix. */
     public boolean startsWith(String prefix) {
-        return false;
+        TreeNode treeNode = searchWord(prefix);
+        if (treeNode == null) {
+            return false;
+        }
+        return true;
+    }
+    
+    public TreeNode searchWord(String word) {
+        Map<Character, TreeNode> child = root.child;
+        TreeNode result = null;
+        for (int i = 0; i < word.length(); i++) {
+            char c = word.charAt(i);
+            if (child.containsKey(c)) {
+                result = child.get(c);
+            } else {
+                return null;
+            }
+            child = result.child;
+        }
+        return result;
+    }
+}
+
+class TreeNode {
+
+    char c;
+
+    Map<Character, TreeNode> child = new HashMap<>();
+
+    boolean isEnd = false;
+
+    public TreeNode() {
+    }
+
+    public TreeNode(char c) {
+        this.c = c;
     }
 }
 
