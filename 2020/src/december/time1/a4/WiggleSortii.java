@@ -1,5 +1,7 @@
 package december.time1.a4;
 
+import java.util.Arrays;
+
 public class WiggleSortii {
     /**
      * 324. 摆动排序 II
@@ -17,7 +19,29 @@ public class WiggleSortii {
      * 你可以假设所有输入都会得到有效的结果。
      */
 
-    public void wiggleSort(int[] nums) {
 
+    /**
+     * 不能等于，那就排序逆序插入
+     */
+
+    public static void wiggleSort(int[] nums) {
+        int[] temp = Arrays.copyOf(nums, nums.length);
+        Arrays.sort(temp);
+        int middleIndex = (int)Math.ceil(temp.length / 2.0);
+        int[] left = Arrays.copyOfRange(temp, 0, middleIndex);
+        int[] right = Arrays.copyOfRange(temp, middleIndex, temp.length);
+        int leftIndex = left.length - 1;
+        int rightIndex = right.length - 1;
+        for (int i = 0; i < temp.length; i++) {
+            if (i % 2 == 0) {
+                nums[i] = left[leftIndex --];
+            } else {
+                nums[i] = right[rightIndex --];
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        wiggleSort(new int[]{1,5,1,1,6,4});
     }
 }
