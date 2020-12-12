@@ -1,5 +1,8 @@
 package december.time2.a5;
 
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
 public class KClosestPointsToOrigin {
     /**
      * 973. 最接近原点的 K 个点
@@ -34,8 +37,30 @@ public class KClosestPointsToOrigin {
      * -10000 < points[i][1] < 10000
      */
 
+    /**
+     * 简单，使用大顶堆，注意的是平方的计算，自己乘自己就好
+     */
+
     public int[][] kClosest(int[][] points, int K) {
-        
-        return null;
+        if (points.length == K) {
+            return points;
+        }
+        int[][] result = new int[K][2];
+        PriorityQueue<int[]> queue = new PriorityQueue<>(new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return (o2[0] * o2[0] + o2[1] * o2[1]) - (o1[0] * o1[0] + o1[1] * o1[1]);
+            }
+        });
+        for (int i = 0; i < points.length; i++) {
+            queue.add(points[i]);
+            if (queue.size() > K) {
+                queue.poll();
+            }
+        }
+        for (int i = 0; i < result.length; i++) {
+            result[i] = queue.poll();
+        }
+        return result;
     }
 }
