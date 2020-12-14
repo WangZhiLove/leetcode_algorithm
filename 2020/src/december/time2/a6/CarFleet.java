@@ -1,5 +1,8 @@
 package december.time2.a6;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class CarFleet {
     /**
      * 853. 车队
@@ -37,7 +40,50 @@ public class CarFleet {
      */
 
     public int carFleet(int target, int[] position, int[] speed) {
-        
-        return 0;
+        if (position.length == 0) {
+            return 0;
+        }
+        Car[] cars = new Car[position.length];
+        for (int i = 0; i < position.length; i++) {
+            cars[i] = new Car(position[i], (target - position[i]) / (speed[i] * 1.0));
+        }
+        Arrays.sort(cars, Comparator.comparingInt(Car::getDistance));
+        int result = 0;
+        int loop = cars.length;
+        while (-- loop > 0) {
+            if (cars[loop].time < cars[loop - 1].time) {
+                result ++;
+            } else {
+                cars[loop - 1] = cars[loop];
+            }
+        }
+        return result + 1;
+    }
+}
+
+class Car {
+    int distance;
+
+    double time;
+
+    public Car(int distance, double time) {
+        this.distance = distance;
+        this.time = time;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public double getTime() {
+        return time;
+    }
+
+    public void setTime(double time) {
+        this.time = time;
     }
 }
